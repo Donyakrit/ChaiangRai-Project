@@ -46,11 +46,11 @@ public class PlayerController2 : MonoBehaviour
 
         if (move.x * move.x > 0.2f | move.z * move.z > 0.2f)
         {
-            animator.SetBool("is_walk", true);
+            //animator.SetBool("is_walk", true);
         }
         else
         {
-            animator.SetBool("is_walk", false);
+            //animator.SetBool("is_walk", false);
         }
     }
 }
