@@ -208,6 +208,34 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Pause"",
+            ""id"": ""0453de2c-88f8-4ce6-87aa-19d1e2deee4d"",
+            ""actions"": [
+                {
+                    ""name"": ""Pausethegame"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e68d00b-3195-41a1-8b8d-454814fce307"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5f95f693-8999-46b8-a97e-573930c1fd5b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pausethegame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -219,6 +247,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         m_Onfoot = asset.FindActionMap("Onfoot", throwIfNotFound: true);
         m_Onfoot_Movement = m_Onfoot.FindAction("Movement", throwIfNotFound: true);
         m_Onfoot_Jump = m_Onfoot.FindAction("Jump", throwIfNotFound: true);
+        // Pause
+        m_Pause = asset.FindActionMap("Pause", throwIfNotFound: true);
+        m_Pause_Pausethegame = m_Pause.FindAction("Pausethegame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -348,6 +379,39 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         }
     }
     public OnfootActions @Onfoot => new OnfootActions(this);
+
+    // Pause
+    private readonly InputActionMap m_Pause;
+    private IPauseActions m_PauseActionsCallbackInterface;
+    private readonly InputAction m_Pause_Pausethegame;
+    public struct PauseActions
+    {
+        private @PlayerInputAction m_Wrapper;
+        public PauseActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pausethegame => m_Wrapper.m_Pause_Pausethegame;
+        public InputActionMap Get() { return m_Wrapper.m_Pause; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PauseActions set) { return set.Get(); }
+        public void SetCallbacks(IPauseActions instance)
+        {
+            if (m_Wrapper.m_PauseActionsCallbackInterface != null)
+            {
+                @Pausethegame.started -= m_Wrapper.m_PauseActionsCallbackInterface.OnPausethegame;
+                @Pausethegame.performed -= m_Wrapper.m_PauseActionsCallbackInterface.OnPausethegame;
+                @Pausethegame.canceled -= m_Wrapper.m_PauseActionsCallbackInterface.OnPausethegame;
+            }
+            m_Wrapper.m_PauseActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Pausethegame.started += instance.OnPausethegame;
+                @Pausethegame.performed += instance.OnPausethegame;
+                @Pausethegame.canceled += instance.OnPausethegame;
+            }
+        }
+    }
+    public PauseActions @Pause => new PauseActions(this);
     public interface IPortalActions
     {
         void OnTP(InputAction.CallbackContext context);
@@ -356,5 +420,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+    }
+    public interface IPauseActions
+    {
+        void OnPausethegame(InputAction.CallbackContext context);
     }
 }
