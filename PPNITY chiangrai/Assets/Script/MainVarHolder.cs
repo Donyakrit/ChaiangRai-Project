@@ -34,13 +34,13 @@ public class MainVarHolder : MonoBehaviour
     public static bool City5Power = false;
 
     public static int City1Consumtion = 5;
-    public static int City2Consumtion = 5;
+    public static int City2Consumtion = 9;
     public static int City3Consumtion = 5;
     public static int City4Consumtion = 5;
     public static int City5Consumtion = 5;
 
-    public static int City1Rent = 5;
-    public static int City2Rent = 5;
+    public static int City1Rent = 6;
+    public static int City2Rent = 8;
     public static int City3Rent = 5;
     public static int City4Rent = 5;
     public static int City5Rent = 5;
