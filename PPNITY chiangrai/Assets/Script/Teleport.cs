@@ -7,6 +7,7 @@ public class Teleport : MonoBehaviour
     public GameObject Player;
     public GameObject Camera;
     public Vector3 CameraPos;
+    public Quaternion CameraRo;
     public Vector3 PlayerPos;
     Transform PlayerTranform;
     Transform CameraTranform;
@@ -32,6 +33,7 @@ public class Teleport : MonoBehaviour
             controller.enabled = false;
             Player.transform.position = PlayerPos;
             Camera.transform.position = CameraPos;
+            Camera.transform.rotation = CameraRo;
             controller.enabled = true;
         }
     }
